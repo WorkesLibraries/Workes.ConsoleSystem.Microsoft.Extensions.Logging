@@ -7,8 +7,8 @@
     <LangVersion>10.0</LangVersion>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageId>Workes.ConsoleSystem.Microsoft.Extensions.Logging</PackageId>
-    <Version>0.1.0</Version>
-    <PackageReleaseNotes>Initial provider with configurable level mapping, category and exception propagation, external scopes, and disposal-safe forwarding.</PackageReleaseNotes>
+    <Version>1.0.0</Version>
+    <PackageReleaseNotes>Stable Microsoft.Extensions.Logging provider for ConsoleManager with customizable level mapping, external scopes, category and exception propagation, and disposal-safe forwarding.</PackageReleaseNotes>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Authors>Workes</Authors>
     <Company>Workes</Company>
