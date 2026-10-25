@@ -1,45 +1,9 @@
-# API GUIDELINES
+# API Guidelines
 
-## Purpose
+Create `ConsoleSystemLoggerProvider(manager, options)` and register it with an existing host or `LoggerFactory`. This package supplies abstractions and a provider, not a concrete host, logger factory, or service container.
 
-Describe the design philosophy and conventions for the package's public API.
+`ConsoleSystemLoggerOptions.LevelMapper` overrides the default same-name mapping for Trace through Critical. `LogLevel.None` maps to null; custom mappings can also return null to ignore a source level. Host filtering and adapter mapping are separate gates. The mapper can be queried by `IsEnabled` and again when a record is written, so custom delegates should be deterministic and side-effect free.
 
-This is a project-control document for keeping the public API consistent. It is not intended to be an exhaustive public API reference.
+The formatted message becomes `LogEntry.Message`; category becomes `Source`; the original exception becomes `Exception`. Active scope strings are prepended in scope order. Structured logging state and `EventId` are not separately queryable afterward.
 
-## Usage
-
-Use this file before changing public-facing types, method names, configuration flows, extension points, or usage patterns.
-
-## Maintenance
-
-Update when the project's API design principles, naming conventions, consistency rules, or overall API philosophy changes.
-
-## Rules
-
-- Document API design intent, not every public member.
-- Separate stable API principles from experimental ideas.
-- Include short examples of preferred API shape when useful.
-- Keep README examples aligned with the normal workflow and explicit package-version installation style.
-- Do not document private implementation details here.
-- Do not use this as a task list.
-
-## API Design Principles
-
-To be written.
-
-## Naming And Structure
-
-To be written.
-
-## Configuration Style
-
-To be written.
-
-## Error Handling And Validation
-
-To be written.
-
-## Examples Of Preferred API Shape
-
-To be written.
-
+The caller owns the manager. Dispose the provider through the host or explicit lifetime scope to stop writes and release logger/scope references. Operations and history events are synchronous on the logging thread; the adapter does not marshal UI work. Custom mappers and history callbacks run during the logging call, so keep them safe for synchronous use.

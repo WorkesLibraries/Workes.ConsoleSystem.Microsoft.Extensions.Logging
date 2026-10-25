@@ -1,45 +1,31 @@
-# DECISIONS
+# Decisions
 
-## Purpose
+Append long-lived decisions using the next `D-NNN` identifier. Preserve superseded entries.
 
-Record long-lived architectural and design decisions.
-
-## Usage
-
-Use this file to explain why important choices were made, especially when alternatives were rejected.
-
-## Maintenance
-
-Append new decisions as they are made.
-
-If a decision changes, add a new entry instead of deleting the old one.
-
-## Rules
-
-- Use decision IDs like D-001, D-002, D-003.
-- Include context, decision, reasoning, and consequences.
-- Prefer append-only history.
-- Do not use this as a task list.
-
-## Decision Format
-
-Use this format for new decisions:
-
-### D-001: Decision title
+### D-001: Provide the abstractions provider without owning a host
 
 #### Context
-
-What situation, problem, or tradeoff led to this decision?
+ConsoleSystem should accept Microsoft logging records without depending on an application's hosting or concrete logging framework.
 
 #### Decision
-
-What did we decide?
+Implement `ILoggerProvider` and `ISupportExternalScope` using Microsoft.Extensions.Logging.Abstractions only. Use the caller's manager and do not add a concrete host or DI dependency.
 
 #### Reasoning
-
-Why was this chosen?
+Applications can integrate the provider into their existing host and retain control of provider registration and manager ownership.
 
 #### Consequences
+Host filtering and logger factory lifetime stay outside this package. Consumers must dispose the provider through that host or explicitly.
 
-What does this make easier, harder, or more constrained?
+### D-002: Store rendered scope context in source-neutral entries
 
+#### Context
+Microsoft logging supplies category, formatted text, scopes, exceptions, structured state, and EventId, while ConsoleSystem entries expose general message/source/exception fields.
+
+#### Decision
+Store formatted text, category as source, original exception, and prepend active scope strings in order. Do not preserve structured state or EventId separately. Default-map standard levels by name and ignore None.
+
+#### Reasoning
+This carries common diagnostic context without introducing Microsoft-specific entry types into ConsoleSystem.
+
+#### Consequences
+Scope data is rendered at write time, not independently queryable. Writes and history callbacks remain synchronous on the caller thread.

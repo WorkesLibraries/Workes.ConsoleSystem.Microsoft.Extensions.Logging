@@ -1,40 +1,13 @@
-# ARCHITECTURE
+# Architecture
 
-## Purpose
+## Boundary
 
-Describe how the project is structured internally and how the main systems relate to each other.
+This package implements `ILoggerProvider` and writes to a caller-supplied ConsoleSystem manager. It targets .NET Standard 2.1 and depends on ConsoleSystem 0.9.0 and Microsoft.Extensions.Logging.Abstractions 10.0.0; it does not depend on a concrete host or DI framework.
 
-This is a project-control document for maintaining architectural consistency. It is not intended to replace focused user documentation under docs/.
+## Flow
 
-## Usage
+`ConsoleSystemLoggerProvider` caches category-specific internal loggers in an ordinal concurrent dictionary and implements `ISupportExternalScope`. Loggers delegate enablement, scope handling, and writes to the provider. The provider owns the level mapper, external scope provider, and manager reference.
 
-Use this file to understand the internal design before making structural changes.
+A log call applies the mapper, formats the message with active scopes prepended in scope order, and records a `LogEntry`. Category is `Source`; the original exception is retained. Structured state and `EventId` are not stored separately. Standard host filters run before the provider; a mapper returning null disables a level, and None is ignored by default.
 
-## Maintenance
-
-Update when the internal structure, core abstractions, dependency flow, or major implementation strategy changes.
-
-## Rules
-
-- Explain current architecture, not wishful future architecture.
-- Prefer clear sections and diagrams when useful.
-- Link to DECISIONS.md when architectural choices need rationale.
-- Do not use this as a task list.
-- Do not treat this as exhaustive user documentation.
-
-## Current Architecture
-
-To be written.
-
-## Main Components
-
-To be written.
-
-## Data Flow / Control Flow
-
-To be written.
-
-## Important Constraints
-
-To be written.
-
+Provider operations are serialized. Disposal stops writes, clears cached loggers, resets scope state, and does not dispose the manager. Writes and history notifications are synchronous on the logging thread.
