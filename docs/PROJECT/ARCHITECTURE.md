@@ -2,7 +2,7 @@
 
 ## Boundary
 
-This package implements `ILoggerProvider` and writes to a caller-supplied ConsoleSystem manager. It targets .NET Standard 2.1 and depends on ConsoleSystem 0.9.0 and Microsoft.Extensions.Logging.Abstractions 10.0.0; it does not depend on a concrete host or DI framework.
+This package implements `ILoggerProvider` and writes to a caller-supplied ConsoleSystem manager. It targets .NET Standard 2.1 and depends on ConsoleSystem 1.0.0 and Microsoft.Extensions.Logging.Abstractions 10.0.0; it does not depend on a concrete host or DI framework.
 
 ## Flow
 
