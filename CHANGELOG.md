@@ -1,6 +1,6 @@
 # Changelog
 
-## [1.1.0] - 28-10-2026
+## [1.1.0] - 08-11-2026
 
 - Updated the Workes.ConsoleSystem dependency to 1.0.0; provider behavior and public API are unchanged.
 
